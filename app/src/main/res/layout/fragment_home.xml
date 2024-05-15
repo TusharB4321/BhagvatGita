@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".view.fragments.HomeFragment">
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:id="@+id/clGita"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintBottom_toTopOf="@+id/cv">
+       
+       <androidx.appcompat.widget.LinearLayoutCompat
+           android:id="@+id/llbhagwat_gita"
+           android:layout_width="wrap_content"
+           android:layout_height="@dimen/_65sdp"
+           android:gravity="center"
+           android:layout_marginEnd="@dimen/_10sdp"
+           android:padding="@dimen/_13sdp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent">
+
+           <ImageView
+               android:layout_width="@dimen/_19sdp"
+               android:layout_height="@dimen/_19sdp"
+               android:src="@drawable/kalash"/>
+
+           <TextView
+               android:id="@+id/tvChapterNo"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginHorizontal="2.60dp"
+               android:text="Shri Bhagvat Gita"
+               android:textSize="@dimen/_23sdp"
+               android:textStyle="bold"
+               android:textColor="#FF4545"/>
+
+           <ImageView
+               android:layout_width="@dimen/_19sdp"
+               android:layout_height="@dimen/_19sdp"
+               android:src="@drawable/kalash"/>
+       </androidx.appcompat.widget.LinearLayoutCompat>
+
+       <ImageView
+           android:id="@+id/ivSetting"
+           android:layout_width="@dimen/_28sdp"
+           android:layout_height="@dimen/_28sdp"
+           android:src="@drawable/chakra"
+           android:layout_marginEnd="@dimen/_10sdp"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintStart_toEndOf="@id/llbhagwat_gita"/>
+       
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_120sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clGita"
+        app:cardCornerRadius="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_3sdp"
+        android:elevation="2.60dp"
+        app:cardUseCompatPadding="true">
+        
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvShowingVerse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2.60dp"
+                android:padding="3.90dp"
+                android:text="Verse of the day"
+                android:textColor="#EB3737"
+                android:textSize="@dimen/_19sdp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvVerseOftheDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2.60dp"
+                android:padding="3.90dp"
+                android:text="Verse of the day"
+                android:textColor="#EB3737"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ImageView
+            android:id="@+id/backgroundImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/rk"
+            android:scaleType="centerCrop"
+            android:alpha="0.2"
+            android:background="@android:color/transparent"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvChapters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="7dp"
+        android:text="Chapters"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_18sdp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@id/cv"
+        />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvChapters"
+        android:orientation="horizontal">
+        
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_7sdp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <include layout="@layout/shimmer_iv_chapters"/>
+                <include layout="@layout/shimmer_iv_chapters"/>
+                <include layout="@layout/shimmer_iv_chapters"/>
+                <include layout="@layout/shimmer_iv_chapters"/>
+                
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChapter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_7sdp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_view_chapters"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    
+    <TextView
+        android:id="@+id/tvShowingMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Internet Connection! \n check for saved chapters in settings"
+        android:textSize="@dimen/_15sdp"
+        android:textColor="#E74141"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="2.60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clGita"
+        android:visibility="gone"/>
+    
+
+</androidx.constraintlayout.widget.ConstraintLayout>
