@@ -27,5 +27,14 @@
         android:id="@+id/versesFragment"
         android:name="com.example.bhagvatgita.view.fragments.VersesFragment"
         android:label="fragment_verses"
-        tools:layout="@layout/fragment_verses" />
+        tools:layout="@layout/fragment_verses" >
+        <action
+            android:id="@+id/action_versesFragment_to_verseDetailFragment"
+            app:destination="@id/verseDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/verseDetailFragment"
+        android:name="com.example.bhagvatgita.view.fragments.VerseDetailFragment"
+        android:label="fragment_verse_detail"
+        tools:layout="@layout/fragment_verse_detail" />
 </navigation>

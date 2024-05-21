@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvItemView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="2.60dp"
+    app:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="6.50dp">
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/chapter_selector"
+            android:padding="7dp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <ImageView
+                    android:layout_width="@dimen/_26sdp"
+                    android:layout_height="26dp"
+                    android:src="@drawable/baseline_edit_note_24"
+                    android:layout_weight="0.1"
+                    app:tint="@color/orange" />
+
+                <TextView
+                    android:id="@+id/tvVerseNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Verse 1"
+                    android:textSize="16dp"
+                    android:layout_weight="2.8"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textColor="@color/orange"/>
+
+                <ImageView
+                    android:id="@+id/ivNext"
+                    android:layout_width="@dimen/_26sdp"
+                    android:layout_height="26dp"
+                    android:src="@drawable/baseline_double_arrow_24"
+                    android:layout_weight="0.1"
+                    app:tint="@color/orange" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            
+            <TextView
+                android:id="@+id/tvVerseDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="The first chapter of bhagvat gita adfffffffewffafafaaffffafesesseewesdfweeseewsfsfsfwefffsfesfwewewffs"
+                android:layout_weight="2"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/black"
+                android:layout_marginTop="6.50dp"
+                android:textSize="@dimen/_15sdp"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ImageView
+            android:id="@+id/backgroundImage"
+            android:layout_width="@dimen/_78sdp"
+            android:layout_height="@dimen/_78sdp"
+            android:src="@drawable/verse_top_right"
+            android:alpha="0.3"
+            android:scaleType="centerInside"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:layout_width="@dimen/_78sdp"
+            android:layout_height="@dimen/_78sdp"
+            android:src="@drawable/verse_chakra"
+            android:alpha="0.4"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@android:color/transparent"/>
+
+        <ImageView
+            android:layout_width="@dimen/_78sdp"
+            android:layout_height="@dimen/_78sdp"
+            android:src="@drawable/verse_bottom_left"
+            android:alpha="0.4"
+            android:scaleType="centerInside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

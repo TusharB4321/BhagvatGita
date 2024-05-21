@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bhagvatgita.databinding.ItemViewChaptersBinding
 import com.example.bhagvatgita.datasource.model.ChaptersModelItem
 
-class ChapterAdapter:RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
+class ChapterAdapter(val onItemClicked: (ChaptersModelItem) -> Unit) :RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
 
     inner class ChapterViewHolder(val binding: ItemViewChaptersBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -42,16 +42,16 @@ class ChapterAdapter:RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
        val chapterList=differ.currentList[position]
 
         holder.binding.apply {
-
             tvChapterNumber.text="Chapter ${chapterList.chapter_number}"
             tvChapterName.text=chapterList.name_translated
             tvChapterDescription.text=chapterList.chapter_summary
             tvVersesCount.text=chapterList.verses_count.toString()
-
         }
 
+        holder.binding.ll.setOnClickListener {
+            onItemClicked(chapterList)
+        }
     }
-
     override fun getItemCount(): Int {
         return differ.currentList.size
     }

@@ -1,7 +1,6 @@
 package com.example.bhagvatgita.view.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +10,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.bhagvatgita.R
 import com.example.bhagvatgita.adapters.ChapterAdapter
 import com.example.bhagvatgita.databinding.FragmentHomeBinding
+import com.example.bhagvatgita.datasource.model.ChaptersModelItem
 import com.example.bhagvatgita.network.NetworkManager
 import com.example.bhagvatgita.viewmodel.MainViewmodel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
     private fun getAllChapters() {
         lifecycleScope.launch {
             viewmodel.getAllChapters().collect{chapterList->
-              chapterAdapter= ChapterAdapter()
+              chapterAdapter= ChapterAdapter(::onItemClicked)
               binding.rvChapter.adapter=chapterAdapter
               chapterAdapter.differ.submitList(chapterList)
               binding.shimmer.visibility=View.GONE
@@ -73,5 +73,14 @@ class HomeFragment : Fragment() {
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightStatusBars = true
         }
+    }
+
+    private fun onItemClicked(chaptersModelItem: ChaptersModelItem){
+        val bundle=Bundle()
+        bundle.putInt("chapterNumber",chaptersModelItem.chapter_number)
+        bundle.putInt("verseCount",chaptersModelItem.verses_count)
+        bundle.putString("chapterTitle",chaptersModelItem.name_translated)
+        bundle.putString("chapterDesc",chaptersModelItem.chapter_summary)
+        findNavController().navigate(R.id.action_homeFragment_to_versesFragment,bundle)
     }
 }
