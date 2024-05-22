@@ -6,12 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bhagvatgita.R
 import com.example.bhagvatgita.adapters.VersesAdapter
 import com.example.bhagvatgita.databinding.FragmentVersesBinding
 import com.example.bhagvatgita.datasource.model.VersesItem
+import com.example.bhagvatgita.network.NetworkManager
 import com.example.bhagvatgita.viewmodel.MainViewmodel
 import kotlinx.coroutines.launch
 
@@ -27,7 +33,8 @@ class VersesFragment : Fragment() {
         binding= FragmentVersesBinding.inflate(layoutInflater)
         readMoreFunctionality()
         getAndSetVerse()
-        getAllVerses()
+        checkInternetConnectivity()
+        changeStatusBarColor()
         return binding.root
     }
     private fun getAllVerses() {
@@ -76,5 +83,38 @@ class VersesFragment : Fragment() {
 
     private fun onItemClicked(verse:String,verseNumber: Int){
 
+        val bundle=Bundle()
+        bundle.putInt("chapterNum",chapterNum)
+        bundle.putInt("verseNum",verseNumber)
+
+        findNavController().navigate(R.id.action_versesFragment_to_verseDetailFragment,bundle)
     }
+
+    private fun changeStatusBarColor() {
+        val window = requireActivity().window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = true
+        }
+    }
+
+    private fun checkInternetConnectivity() {
+        val networkManager= NetworkManager(requireContext())
+
+        networkManager.observe(viewLifecycleOwner){
+
+            if (it==true){
+                binding.shimmer.visibility=View.VISIBLE
+                binding.rvVerses.visibility=View.VISIBLE
+                binding.tvShowingMessage.visibility=View.GONE
+                getAllVerses()
+            }else{
+                binding.shimmer.visibility=View.GONE
+                binding.rvVerses.visibility=View.GONE
+                binding.tvShowingMessage.visibility=View.VISIBLE
+            }
+        }
+    }
+
 }
