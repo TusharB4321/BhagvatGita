@@ -175,11 +175,13 @@ class VerseDetailFragment : Fragment() {
 
             if (it==true){
                 binding.tvShowingMessage.visibility=View.GONE
+                binding.progressBar.visibility=View.VISIBLE
                 getVerseDetails()
             }else{
                 binding.tvShowingMessage.visibility=View.VISIBLE
                 binding.iv.visibility=View.VISIBLE
                 binding.progressBar.visibility=View.GONE
+                visibleGone()
             }
         }
     }
@@ -189,6 +191,13 @@ class VerseDetailFragment : Fragment() {
         binding.backgroundImage.visibility=View.VISIBLE
         binding.llBottom.visibility=View.VISIBLE
         binding.ivFavourite.visibility=View.VISIBLE
+
+    }
+    private fun visibleGone(){
+        binding.llVisibility.visibility=View.GONE
+        binding.backgroundImage.visibility=View.GONE
+        binding.llBottom.visibility=View.GONE
+        binding.ivFavourite.visibility=View.GONE
 
     }
 
