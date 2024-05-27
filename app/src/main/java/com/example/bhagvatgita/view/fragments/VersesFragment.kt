@@ -18,6 +18,7 @@ import com.example.bhagvatgita.adapters.VersesAdapter
 import com.example.bhagvatgita.databinding.FragmentVersesBinding
 import com.example.bhagvatgita.datasource.model.VersesItem
 import com.example.bhagvatgita.network.NetworkManager
+import com.example.bhagvatgita.utils.Common.changeStatusBarColor
 import com.example.bhagvatgita.viewmodel.MainViewmodel
 import kotlinx.coroutines.launch
 
@@ -33,16 +34,37 @@ class VersesFragment : Fragment() {
         binding= FragmentVersesBinding.inflate(layoutInflater)
         readMoreFunctionality()
         getAndSetVerse()
-        checkInternetConnectivity()
-        changeStatusBarColor()
+        getRoomData()
+        changeStatusBarColor(requireActivity(),R.color.white)
         return binding.root
     }
+
+    private fun getRoomData() {
+        val bundle=arguments
+        val showDataFromRoom=bundle!!.getBoolean("showRoomData",false)
+
+        if (showDataFromRoom){
+            getDataFromRoom()
+        }else{
+            checkInternetConnectivity()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getDataFromRoom() {
+        viewmodel.getPerticularChapter(chapterNum).observe(viewLifecycleOwner){
+            binding.tvChapterNo.text="Chapter ${it.chapter_number}"
+            binding.tvVerseName.text=it.name_translated
+            binding.tvDescription.text= it.chapter_summary
+            binding.tvNumberOfVerses.text= "${it.verses_count} Verses"
+            showListInAdapter(it.verses)
+        }
+    }
+
     private fun getAllVerses() {
         lifecycleScope.launch {
             viewmodel.getAllVerses(chapterNum).collect{VerseList->
-                versesAdapter= VersesAdapter(::onItemClicked)
-                binding.rvVerses.adapter=versesAdapter
-                binding.rvVerses.layoutManager=LinearLayoutManager(requireContext())
+
                 val list= arrayListOf<String>()
                 for (currentList in VerseList){
                     for (verseList in currentList.translations){
@@ -52,11 +74,19 @@ class VersesFragment : Fragment() {
                         }
                     }
                 }
-                versesAdapter.differ.submitList(list)
-                binding.shimmer.visibility=View.GONE
+                showListInAdapter(list)
             }
         }
    }
+
+    private fun showListInAdapter(list: List<String>) {
+        versesAdapter= VersesAdapter(::onItemClicked)
+        binding.rvVerses.adapter=versesAdapter
+        binding.rvVerses.layoutManager=LinearLayoutManager(requireContext())
+        versesAdapter.differ.submitList(list)
+        binding.shimmer.visibility=View.GONE
+    }
+
     private fun readMoreFunctionality() {
         var isRead=false
 
@@ -90,14 +120,7 @@ class VersesFragment : Fragment() {
         findNavController().navigate(R.id.action_versesFragment_to_verseDetailFragment,bundle)
     }
 
-    private fun changeStatusBarColor() {
-        val window = requireActivity().window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = true
-        }
-    }
+
 
     private fun checkInternetConnectivity() {
         val networkManager= NetworkManager(requireContext())

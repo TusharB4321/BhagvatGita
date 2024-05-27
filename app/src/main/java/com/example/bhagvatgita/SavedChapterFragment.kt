@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.bhagvatgita.adapters.ChapterAdapter
 import com.example.bhagvatgita.databinding.FragmentSavedChapterBinding
 import com.example.bhagvatgita.datasource.model.ChaptersModelItem
@@ -57,7 +58,7 @@ class SavedChapterFragment : Fragment() {
                 binding.tvShowingMessage.visibility=View.GONE
             }
 
-            chapterAdapter= ChapterAdapter(::onClickedChapterItem,null)
+            chapterAdapter= ChapterAdapter(::onClickedChapterItem,null,false)
             binding.rvChapter.adapter=chapterAdapter
             chapterAdapter.differ.submitList(chapterList)
 
@@ -66,7 +67,11 @@ class SavedChapterFragment : Fragment() {
         }
     }
 
-    fun onClickedChapterItem(chaptersModelItem: ChaptersModelItem){
+    private fun onClickedChapterItem(chaptersModelItem: ChaptersModelItem){
+        val bundle=Bundle()
+        bundle.putInt("chapterNumber",chaptersModelItem.chapter_number)
+        bundle.putBoolean("showRoomData",true)
 
+        findNavController().navigate(R.id.action_savedChapterFragment_to_versesFragment,bundle)
     }
 }

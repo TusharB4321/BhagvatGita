@@ -79,4 +79,6 @@ class MainRepository(val savedChapterDao: SavedChapterDao) {
     suspend fun insertChapters(saveChapter: SaveChapters)=savedChapterDao.insertChapters(saveChapter)
 
     fun getSavedChapter(): LiveData<List<SaveChapters>> =savedChapterDao.getSavedChapter()
+
+    fun getPerticularChapter(chapter_number:Int):LiveData<SaveChapters> =savedChapterDao.getPerticularChapter(chapter_number)
 }

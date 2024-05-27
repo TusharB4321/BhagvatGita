@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
     private fun getAllChapters() {
         lifecycleScope.launch {
             viewmodel.getAllChapters().collect{chapterList->
-              chapterAdapter= ChapterAdapter(::onItemClicked,::onFavouriteClicked)
+              chapterAdapter= ChapterAdapter(::onItemClicked, ::onFavouriteClicked, true)
               binding.rvChapter.adapter=chapterAdapter
               chapterAdapter.differ.submitList(chapterList)
               binding.shimmer.visibility=View.GONE

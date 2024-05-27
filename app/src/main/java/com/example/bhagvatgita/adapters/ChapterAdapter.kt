@@ -1,6 +1,7 @@
 package com.example.bhagvatgita.adapters
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +11,8 @@ import com.example.bhagvatgita.datasource.model.ChaptersModelItem
 
 class ChapterAdapter(
     val onItemClicked: (ChaptersModelItem) -> Unit,
-    val onFavItemClicked: ((ChaptersModelItem) -> Unit)?
+    val onFavItemClicked: ((ChaptersModelItem) -> Unit)?,
+    val isFavourite: Boolean
 ) :RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
 
     inner class ChapterViewHolder(val binding: ItemViewChaptersBinding): RecyclerView.ViewHolder(binding.root)
@@ -56,6 +58,10 @@ class ChapterAdapter(
             onItemClicked(chapterList)
         }
 
+        if (isFavourite) {
+            holder.binding.ivFavourite.visibility = View.VISIBLE
+            holder.binding.ivFavouriteFilled.visibility = View.GONE
+        }
         holder.binding.apply {
             ivFavourite.setOnClickListener {
                 onFavItemClicked?.let { it1 -> it1(chapterList) }

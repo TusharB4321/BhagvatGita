@@ -26,6 +26,8 @@ class MainViewmodel(application: Application):AndroidViewModel(application) {
 
     fun getSavedChapter(): LiveData<List<SaveChapters>> =repository.getSavedChapter()
 
+    fun getPerticularChapter(chapter_number:Int):LiveData<SaveChapters> =repository.getPerticularChapter(chapter_number)
+
 
 
 }
