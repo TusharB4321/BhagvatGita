@@ -16,6 +16,8 @@ import com.example.bhagvatgita.databinding.FragmentVerseDetailBinding
 import com.example.bhagvatgita.datasource.model.Commentary
 import com.example.bhagvatgita.datasource.model.Translation
 import com.example.bhagvatgita.network.NetworkManager
+import com.example.bhagvatgita.utils.Common
+import com.example.bhagvatgita.utils.Common.changeStatusBarColor
 import com.example.bhagvatgita.viewmodel.MainViewmodel
 import kotlinx.coroutines.launch
 
@@ -36,7 +38,7 @@ class VerseDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        changeStatusBarColor()
+        changeStatusBarColor(requireActivity(),R.color.white)
         getAndSetChapterVerseNumber()
         checkInternetConnectivity()
         readMoreFunctionality()
@@ -143,15 +145,6 @@ class VerseDetailFragment : Fragment() {
         chapterNum=bundle!!.getInt("chapterNum")
         verseNum=bundle.getInt("verseNum")
         binding.tvVerseNumber.text="|| $chapterNum.$verseNum ||"
-    }
-
-    private fun changeStatusBarColor() {
-        val window = requireActivity().window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = true
-        }
     }
 
     private fun readMoreFunctionality() {

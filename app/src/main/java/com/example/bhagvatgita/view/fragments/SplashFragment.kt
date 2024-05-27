@@ -13,6 +13,8 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.fragment.findNavController
 import com.example.bhagvatgita.R
 import com.example.bhagvatgita.databinding.FragmentSplashBinding
+import com.example.bhagvatgita.utils.Common
+import com.example.bhagvatgita.utils.Common.changeStatusBarColor
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {
 
@@ -22,7 +24,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         savedInstanceState: Bundle?
     ): View? {
         binding=FragmentSplashBinding.inflate(layoutInflater)
-        changeStatusBarColor()
+        changeStatusBarColor(requireActivity(),R.color.splash)
         return binding.root
     }
 
@@ -35,13 +37,5 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     }
 
-    private fun changeStatusBarColor() {
-        val window = requireActivity().window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.splash)
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = true
-        }
-    }
 
 }
