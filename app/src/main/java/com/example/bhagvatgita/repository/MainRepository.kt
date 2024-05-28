@@ -6,6 +6,8 @@ import com.example.bhagvatgita.datasource.model.ChaptersModelItem
 import com.example.bhagvatgita.datasource.model.VersesItem
 import com.example.bhagvatgita.datasource.room.SaveChapters
 import com.example.bhagvatgita.datasource.room.SavedChapterDao
+import com.example.bhagvatgita.datasource.room.SavedVerses
+import com.example.bhagvatgita.datasource.room.SavedVersesDao
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -13,7 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainRepository(val savedChapterDao: SavedChapterDao) {
+class MainRepository(val savedChapterDao: SavedChapterDao,val savedVersesDao: SavedVersesDao) {
     fun getAllChapters(): Flow<List<ChaptersModelItem>> = callbackFlow {
         val callback=object :Callback<List<ChaptersModelItem>>{
             override fun onResponse(
@@ -75,10 +77,17 @@ class MainRepository(val savedChapterDao: SavedChapterDao) {
         awaitClose {}
     }
 
-    // Offline Data storage
+    // Offline chapter Data storage
     suspend fun insertChapters(saveChapter: SaveChapters)=savedChapterDao.insertChapters(saveChapter)
 
     fun getSavedChapter(): LiveData<List<SaveChapters>> =savedChapterDao.getSavedChapter()
 
     fun getPerticularChapter(chapter_number:Int):LiveData<SaveChapters> =savedChapterDao.getPerticularChapter(chapter_number)
+
+    //offline Verses Data Storage
+
+    suspend fun insertVerses(versesItem: SavedVerses) =savedVersesDao.insertVerses(versesItem)
+    fun getAllVerse(): LiveData<List<SavedVerses>> =savedVersesDao.getAllVerse()
+    fun getPerticularVerses(chapter_number:Int,verse_number:Int): LiveData<SavedVerses> =savedVersesDao.getPerticularVerses(chapter_number,verse_number)
+    fun deletePerticularVerses(chapter_number:Int,verse_number:Int)=savedVersesDao.deletePerticularVerses(chapter_number,verse_number)
 }

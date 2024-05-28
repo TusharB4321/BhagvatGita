@@ -6,12 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [SaveChapters::class], version = 1, exportSchema = false)
+@Database(entities = [SaveChapters::class,SavedVerses::class], version = 2, exportSchema = false)
 @TypeConverters(TypeConverterr::class)
 abstract class AppDatabase:RoomDatabase() {
-
     abstract fun saveChapterDao():SavedChapterDao
-
+    abstract fun saveVersesDao():SavedVersesDao
     companion object{
 
         @Volatile

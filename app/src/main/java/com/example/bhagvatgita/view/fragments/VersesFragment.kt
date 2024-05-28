@@ -6,9 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bhagvatgita.R
 import com.example.bhagvatgita.adapters.VersesAdapter
 import com.example.bhagvatgita.databinding.FragmentVersesBinding
-import com.example.bhagvatgita.datasource.model.VersesItem
 import com.example.bhagvatgita.network.NetworkManager
 import com.example.bhagvatgita.utils.Common.changeStatusBarColor
 import com.example.bhagvatgita.viewmodel.MainViewmodel
@@ -57,7 +53,7 @@ class VersesFragment : Fragment() {
             binding.tvVerseName.text=it.name_translated
             binding.tvDescription.text= it.chapter_summary
             binding.tvNumberOfVerses.text= "${it.verses_count} Verses"
-            showListInAdapter(it.verses)
+            showListInAdapter(it.verses,false)
         }
     }
 
@@ -74,13 +70,13 @@ class VersesFragment : Fragment() {
                         }
                     }
                 }
-                showListInAdapter(list)
+                showListInAdapter(list,true)
             }
         }
    }
 
-    private fun showListInAdapter(list: List<String>) {
-        versesAdapter= VersesAdapter(::onItemClicked)
+    private fun showListInAdapter(list: List<String>,onClick:Boolean) {
+        versesAdapter= VersesAdapter(::onItemClicked,onClick)
         binding.rvVerses.adapter=versesAdapter
         binding.rvVerses.layoutManager=LinearLayoutManager(requireContext())
         versesAdapter.differ.submitList(list)

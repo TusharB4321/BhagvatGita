@@ -10,11 +10,14 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.example.bhagvatgita.R
 import com.example.bhagvatgita.databinding.FragmentVerseDetailBinding
 import com.example.bhagvatgita.datasource.model.Commentary
 import com.example.bhagvatgita.datasource.model.Translation
+import com.example.bhagvatgita.datasource.model.VersesItem
+import com.example.bhagvatgita.datasource.room.SavedVerses
 import com.example.bhagvatgita.network.NetworkManager
 import com.example.bhagvatgita.utils.Common
 import com.example.bhagvatgita.utils.Common.changeStatusBarColor
@@ -25,9 +28,9 @@ class VerseDetailFragment : Fragment() {
 
     private lateinit var binding:FragmentVerseDetailBinding
     private val viewmodel:MainViewmodel by viewModels()
-
     private var chapterNum=0
     private var verseNum=0
+    private var verse= MutableLiveData<VersesItem>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,13 +45,62 @@ class VerseDetailFragment : Fragment() {
         getAndSetChapterVerseNumber()
         checkInternetConnectivity()
         readMoreFunctionality()
+        favouriteFunctionality()
+    }
+
+    private fun favouriteFunctionality() {
+        binding.ivFavourite.setOnClickListener {
+            binding.ivFavourite.visibility=View.GONE
+            binding.ivFavouriteFilled.visibility=View.VISIBLE
+
+            saveVerseDetails()
+        }
+        binding.ivFavouriteFilled.setOnClickListener {
+            binding.ivFavourite.visibility=View.VISIBLE
+            binding.ivFavouriteFilled.visibility=View.GONE
+        }
+    }
+
+    private fun saveVerseDetails() {
+        verse.observe(viewLifecycleOwner){
+
+            val englishTranslationList= arrayListOf<Translation>()
+
+            for (i in it.translations){
+                if (i.language=="english"){
+                    englishTranslationList.add(i)
+                }
+            }
+            val englishCommentaryList= arrayListOf<Commentary>()
+
+            for (i in it.commentaries){
+                if (i.language=="hindi"){
+                    englishCommentaryList.add(i)
+                }
+            }
+            val savedVerses=SavedVerses(
+                it.chapter_number,
+                commentaries = englishCommentaryList,
+                it.id,
+                it.slug,
+                it.text,
+                englishTranslationList,
+                it.transliteration,
+                it.verse_number,
+                it.word_meanings
+            )
+
+            lifecycleScope.launch {
+                viewmodel.insertVerses(savedVerses)
+            }
+
+        }
     }
 
     private fun getVerseDetails() {
 
         lifecycleScope.launch {
             viewmodel.getPerticularVerse(chapterNum,verseNum).collect{verseDetails->
-
                 binding.tvVerseText.text=verseDetails.text
                 binding.tvVerseTranslationEnglish.text=verseDetails.transliteration
                 binding.tvWordOfEng.text=verseDetails.word_meanings
@@ -94,7 +146,7 @@ class VerseDetailFragment : Fragment() {
 
                     }
                 // For Commentary
-                val englishCommentaryList= arrayListOf<Commentary>()
+                 val englishCommentaryList= arrayListOf<Commentary>()
 
                 for (i in verseDetails.commentaries){
                     if (i.language=="hindi"){

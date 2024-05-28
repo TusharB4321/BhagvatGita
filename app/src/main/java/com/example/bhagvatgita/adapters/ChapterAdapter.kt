@@ -14,10 +14,7 @@ class ChapterAdapter(
     val onFavItemClicked: ((ChaptersModelItem) -> Unit)?,
     val isFavourite: Boolean
 ) :RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
-
     inner class ChapterViewHolder(val binding: ItemViewChaptersBinding): RecyclerView.ViewHolder(binding.root)
-
-
     val differUtil=object : DiffUtil.ItemCallback<ChaptersModelItem>(){
         override fun areItemsTheSame(
             oldItem: ChaptersModelItem,
@@ -25,14 +22,12 @@ class ChapterAdapter(
         ): Boolean {
             return oldItem.id==newItem.id
         }
-
         override fun areContentsTheSame(
             oldItem: ChaptersModelItem,
             newItem: ChaptersModelItem
         ): Boolean {
             return oldItem==newItem
         }
-
     }
 
     val differ= AsyncListDiffer(this,differUtil)
@@ -60,7 +55,8 @@ class ChapterAdapter(
 
         if (isFavourite) {
             holder.binding.ivFavourite.visibility = View.VISIBLE
-            holder.binding.ivFavouriteFilled.visibility = View.GONE
+        }else{
+            holder.binding.ivFavourite.visibility = View.GONE
         }
         holder.binding.apply {
             ivFavourite.setOnClickListener {

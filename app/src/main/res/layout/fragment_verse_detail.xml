@@ -77,6 +77,19 @@
                         app:tint="@color/orange"
                         android:visibility="gone"/>
 
+                    <ImageView
+                        android:id="@+id/ivFavouriteFilled"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:src="@drawable/baseline_favorite_24"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/llBhagvatGita"
+                        app:tint="@color/orange"
+                        android:visibility="gone"/>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
