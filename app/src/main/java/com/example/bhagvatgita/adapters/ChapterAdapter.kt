@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bhagvatgita.databinding.ItemViewChaptersBinding
 import com.example.bhagvatgita.datasource.model.ChaptersModelItem
+import com.example.bhagvatgita.viewmodel.MainViewmodel
 
 class ChapterAdapter(
     val onItemClicked: (ChaptersModelItem) -> Unit,
     val onFavItemClicked: ((ChaptersModelItem) -> Unit)?,
-    val isFavourite: Boolean
+    val isFavourite: Boolean,
+    val onFavouriteFilledClicked: (ChaptersModelItem) -> Unit,
+    val viewmodel: MainViewmodel
 ) :RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>() {
     inner class ChapterViewHolder(val binding: ItemViewChaptersBinding): RecyclerView.ViewHolder(binding.root)
     val differUtil=object : DiffUtil.ItemCallback<ChaptersModelItem>(){
@@ -53,14 +56,31 @@ class ChapterAdapter(
             onItemClicked(chapterList)
         }
 
-        if (isFavourite) {
-            holder.binding.ivFavourite.visibility = View.VISIBLE
-        }else{
+        val keys=viewmodel.getAllSaveChapterKeySp()
+
+        if (!isFavourite) {
             holder.binding.ivFavourite.visibility = View.GONE
+            holder.binding.ivFavouriteFilled.visibility = View.GONE
+        }else{
+            if (keys.contains(chapterList.chapter_number.toString())){
+                holder.binding.ivFavourite.visibility = View.GONE
+                holder.binding.ivFavouriteFilled.visibility = View.VISIBLE
+            }else{
+                holder.binding.ivFavourite.visibility = View.VISIBLE
+                holder.binding.ivFavouriteFilled.visibility = View.GONE
+            }
         }
         holder.binding.apply {
             ivFavourite.setOnClickListener {
+                ivFavouriteFilled.visibility=View.VISIBLE
+                ivFavourite.visibility=View.GONE
                 onFavItemClicked?.let { it1 -> it1(chapterList) }
+            }
+
+            ivFavouriteFilled.setOnClickListener {
+                ivFavourite.visibility=View.VISIBLE
+                ivFavouriteFilled.visibility=View.GONE
+                onFavouriteFilledClicked(chapterList)
             }
         }
     }

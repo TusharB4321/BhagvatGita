@@ -8,6 +8,7 @@ import com.example.bhagvatgita.datasource.room.SaveChapters
 import com.example.bhagvatgita.datasource.room.SavedChapterDao
 import com.example.bhagvatgita.datasource.room.SavedVerses
 import com.example.bhagvatgita.datasource.room.SavedVersesDao
+import com.example.bhagvatgita.datasource.sharedPref.SharedPreferenceManager
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -15,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainRepository(val savedChapterDao: SavedChapterDao,val savedVersesDao: SavedVersesDao) {
+class MainRepository(val savedChapterDao: SavedChapterDao,val savedVersesDao: SavedVersesDao,val sharedPreferenceManager: SharedPreferenceManager) {
     fun getAllChapters(): Flow<List<ChaptersModelItem>> = callbackFlow {
         val callback=object :Callback<List<ChaptersModelItem>>{
             override fun onResponse(
@@ -84,10 +85,20 @@ class MainRepository(val savedChapterDao: SavedChapterDao,val savedVersesDao: Sa
 
     fun getPerticularChapter(chapter_number:Int):LiveData<SaveChapters> =savedChapterDao.getPerticularChapter(chapter_number)
 
+    suspend fun deleteChapter(id:Int) =savedChapterDao.deleteChapter(id)
+
     //offline Verses Data Storage
 
     suspend fun insertVerses(versesItem: SavedVerses) =savedVersesDao.insertVerses(versesItem)
-    fun getAllVerse(): LiveData<List<SavedVerses>> =savedVersesDao.getAllVerse()
+    fun getAllEnglishVerse(): LiveData<List<SavedVerses>> =savedVersesDao.getAllEnglishVerse()
     fun getPerticularVerses(chapter_number:Int,verse_number:Int): LiveData<SavedVerses> =savedVersesDao.getPerticularVerses(chapter_number,verse_number)
     fun deletePerticularVerses(chapter_number:Int,verse_number:Int)=savedVersesDao.deletePerticularVerses(chapter_number,verse_number)
+
+    // saved chapter in Sp
+
+    fun getAllSaveChapterKeySp() =sharedPreferenceManager.getAllSaveChapterKeySp()
+
+    fun putSavedChapterSp(key:String,value:Int)= sharedPreferenceManager.putSavedChapterSp(key,value)
+
+    fun deleteSavedChapterFromSp(key:String) = sharedPreferenceManager.deleteSavedChapterFromSp(key)
 }

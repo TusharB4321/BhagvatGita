@@ -21,7 +21,7 @@ import com.example.bhagvatgita.datasource.model.Translation
         val verses:List<String>
     )
 
- @Entity(tableName = "SavedVerses")
+ @Entity(tableName ="SavedVerses")
  data class SavedVerses(
     val chapter_number: Int,
     val commentaries: List<Commentary>,

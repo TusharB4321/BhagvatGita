@@ -16,7 +16,7 @@ interface SavedChapterDao {
     fun getSavedChapter():LiveData<List<SaveChapters>>
 
     @Query("DELETE FROM SavedChapter WHERE id= :id")
-    fun deleteChapter(id:Int)
+    suspend fun deleteChapter(id:Int)
 
     @Query("SELECT * FROM SavedChapter WHERE chapter_number= :chapter_number")
     fun getPerticularChapter(chapter_number:Int):LiveData<SaveChapters>

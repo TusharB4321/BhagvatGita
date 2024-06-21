@@ -2,6 +2,7 @@ package com.example.bhagvatgita.view.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -43,36 +44,141 @@ class VerseDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         changeStatusBarColor(requireActivity(),R.color.white)
         getAndSetChapterVerseNumber()
-        checkInternetConnectivity()
+        getData()
         readMoreFunctionality()
         favouriteFunctionality()
+    }
+
+    private fun getData() {
+        val bundle=arguments
+         val showRoomData=bundle?.getBoolean("showRoomData",false)
+
+        if (showRoomData==true){
+            binding.ivFavourite.visibility=View.GONE
+            viewmodel.getPerticularVerses(chapterNum,verseNum).observe(viewLifecycleOwner){verseDetails->
+                binding.tvVerseText.text=verseDetails.text
+                binding.tvVerseTranslationEnglish.text=verseDetails.transliteration
+                binding.tvWordOfEng.text=verseDetails.word_meanings
+
+                val englishTranslationList= arrayListOf<Translation>()
+
+                for (i in verseDetails.translations){
+                    if (i.language=="english"){
+                        englishTranslationList.add(i)
+                    }
+                }
+
+                val englishTranslationListSize= englishTranslationList.size
+
+                if (englishTranslationList.isNotEmpty()){
+                    binding.tvAuthorName.text=englishTranslationList[0].author_name
+                    binding.tvText.text=englishTranslationList[0].description
+
+                    if (englishTranslationListSize==1) binding.fabTranslationRight.visibility=View.GONE
+
+                    var i=0
+                    binding.fabTranslationRight.setOnClickListener {
+                        if (i<englishTranslationListSize-1){
+                            i++
+                            binding.tvAuthorName.text=englishTranslationList[i].author_name
+                            binding.tvText.text=englishTranslationList[i].description
+                            binding.fabTranslationLeft.visibility=View.VISIBLE
+
+                            if (i==englishTranslationListSize-1) binding.fabTranslationRight.visibility=View.GONE
+                        }
+                    }
+
+                    binding.fabTranslationLeft.setOnClickListener {
+                        if (i>0){
+                            i--
+                            binding.tvAuthorName.text=englishTranslationList[i].author_name
+                            binding.tvText.text=englishTranslationList[i].description
+                            binding.fabTranslationRight.visibility=View.VISIBLE
+
+                            if (i==0) binding.fabTranslationLeft.visibility=View.GONE
+                        }
+                    }
+
+                }
+                // For Commentary
+                val englishCommentaryList= arrayListOf<Commentary>()
+
+                for (i in verseDetails.commentaries){
+                    if (i.language=="hindi"){
+                        englishCommentaryList.add(i)
+                    }
+                }
+
+                val englishCommentarySize= englishCommentaryList.size
+
+                if (englishCommentaryList.isNotEmpty()){
+                    binding.tvAuthorNameCommentary.text=englishCommentaryList[0].author_name
+                    binding.tvTextCommentary.text=englishCommentaryList[0].description
+
+                    if (englishCommentarySize==1) binding.fabTranslationRightCommentary.visibility=View.GONE
+
+                    var i=0
+                    binding.fabTranslationRightCommentary.setOnClickListener {
+                        if (i<englishCommentarySize-1){
+                            i++
+                            binding.tvAuthorNameCommentary.text=englishCommentaryList[i].author_name
+                            binding.tvTextCommentary.text=englishCommentaryList[i].description
+                            binding.fabTranslationLeftCommentary.visibility=View.VISIBLE
+
+                            if (i==englishCommentarySize-1) binding.fabTranslationRightCommentary.visibility=View.GONE
+                        }
+                    }
+
+                    binding.fabTranslationLeftCommentary.setOnClickListener {
+                        if (i>0){
+                            i--
+                            binding.tvAuthorNameCommentary.text=englishCommentaryList[i].author_name
+                            binding.tvTextCommentary.text=englishCommentaryList[i].description
+                            binding.fabTranslationRightCommentary.visibility=View.VISIBLE
+
+                            if (i==0) binding.fabTranslationLeftCommentary.visibility=View.GONE
+                        }
+                    }
+
+                }
+
+                binding.progressBar.visibility=View.GONE
+                visibleView()
+                }
+
+        }else{
+            checkInternetConnectivity()
+        }
     }
 
     private fun favouriteFunctionality() {
         binding.ivFavourite.setOnClickListener {
             binding.ivFavourite.visibility=View.GONE
             binding.ivFavouriteFilled.visibility=View.VISIBLE
-
             saveVerseDetails()
         }
         binding.ivFavouriteFilled.setOnClickListener {
             binding.ivFavourite.visibility=View.VISIBLE
             binding.ivFavouriteFilled.visibility=View.GONE
+            deleteVerse()
+        }
+    }
+
+    private fun deleteVerse() {
+        lifecycleScope.launch {
+            viewmodel.deletePerticularVerses(chapterNum,verseNum)
         }
     }
 
     private fun saveVerseDetails() {
         verse.observe(viewLifecycleOwner){
-
             val englishTranslationList= arrayListOf<Translation>()
-
             for (i in it.translations){
                 if (i.language=="english"){
                     englishTranslationList.add(i)
                 }
             }
             val englishCommentaryList= arrayListOf<Commentary>()
-
             for (i in it.commentaries){
                 if (i.language=="hindi"){
                     englishCommentaryList.add(i)
@@ -93,7 +199,7 @@ class VerseDetailFragment : Fragment() {
             lifecycleScope.launch {
                 viewmodel.insertVerses(savedVerses)
             }
-
+            Log.d("saveVersess","${savedVerses.translations}")
         }
     }
 

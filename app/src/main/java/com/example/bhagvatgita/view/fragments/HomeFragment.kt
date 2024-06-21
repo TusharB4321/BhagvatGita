@@ -32,6 +32,7 @@ class HomeFragment : Fragment() {
 
     private fun onFavouriteClicked(chapterItem:ChaptersModelItem){
         lifecycleScope.launch {
+            viewmodel.putSavedChapterSp(chapterItem.chapter_number.toString(),chapterItem.id)
             viewmodel.getAllVerses(chapterItem.chapter_number).collect{VerseList->
                 val list= arrayListOf<String>()
                 for (currentList in VerseList){
@@ -69,6 +70,7 @@ class HomeFragment : Fragment() {
                 binding.rvChapter.visibility=View.VISIBLE
                 binding.tvShowingMessage.visibility=View.GONE
                 getAllChapters()
+                showVerseOftheDay()
             }else{
                binding.shimmer.visibility=View.GONE
                binding.rvChapter.visibility=View.GONE
@@ -77,10 +79,28 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun showVerseOftheDay() {
+
+        val chapterNo=(1..18).random()
+        val verseNo=(1..20).random()
+        lifecycleScope.launch {
+            viewmodel.getPerticularVerse(chapterNo,verseNo).collect{
+
+                for (i in it.translations){
+
+                    if (i.language=="english"){
+                        binding.tvVerseOftheDay.text=i.description
+                        break
+                    }
+                }
+            }
+        }
+    }
+
     private fun getAllChapters() {
         lifecycleScope.launch {
             viewmodel.getAllChapters().collect{chapterList->
-              chapterAdapter= ChapterAdapter(::onItemClicked, ::onFavouriteClicked, true)
+              chapterAdapter= ChapterAdapter(::onItemClicked, ::onFavouriteClicked, true,::onFavouriteFilledClicked,viewmodel)
               binding.rvChapter.adapter=chapterAdapter
               chapterAdapter.differ.submitList(chapterList)
               binding.shimmer.visibility=View.GONE
@@ -104,5 +124,12 @@ class HomeFragment : Fragment() {
         bundle.putString("chapterTitle",chaptersModelItem.name_translated)
         bundle.putString("chapterDesc",chaptersModelItem.chapter_summary)
         findNavController().navigate(R.id.action_homeFragment_to_versesFragment,bundle)
+    }
+    private fun onFavouriteFilledClicked(chaptersModelItem: ChaptersModelItem){
+        lifecycleScope.launch {
+            viewmodel.deleteSavedChapterFromSp(chaptersModelItem.chapter_number.toString())
+            viewmodel.deleteChapter(chaptersModelItem.id)
+        }
+
     }
 }

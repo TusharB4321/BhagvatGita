@@ -58,7 +58,13 @@ class SavedChapterFragment : Fragment() {
                 binding.tvShowingMessage.visibility=View.GONE
             }
 
-            chapterAdapter= ChapterAdapter(::onClickedChapterItem,null,false)
+            chapterAdapter= ChapterAdapter(
+                ::onClickedChapterItem,
+                null,
+                false,
+                ::onFavouriteFilledClicked,
+                viewmodel
+            )
             binding.rvChapter.adapter=chapterAdapter
             chapterAdapter.differ.submitList(chapterList)
 
@@ -73,5 +79,9 @@ class SavedChapterFragment : Fragment() {
         bundle.putBoolean("showRoomData",true)
 
         findNavController().navigate(R.id.action_savedChapterFragment_to_versesFragment,bundle)
+    }
+
+    private fun onFavouriteFilledClicked(chaptersModelItem: ChaptersModelItem){
+
     }
 }
